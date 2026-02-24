@@ -14,6 +14,8 @@ body {
 }
 
 body {
+    display: flex;
+    flex-direction: column;
     background: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80') center/cover no-repeat;
     position: relative;
     transition: background-image 1.5s ease-in-out;
@@ -134,10 +136,12 @@ body::before {
 .content {
     position: relative;
     z-index: 10;
-    height: calc(100vh - 90px);
+    flex: 1 1 0;
+    min-height: 0;
     overflow-y: auto;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-content: start;
     gap: 1rem;
     padding: 0.2rem 1.2rem 1rem;
     touch-action: pan-y;
@@ -165,7 +169,7 @@ body::before {
     border: 1px solid rgba(255, 255, 255, 0.2);
     padding: 1rem;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     display: flex;
@@ -596,7 +600,6 @@ body.os-focus .tray {
 
     .content {
         padding: 0.2rem 0.8rem 0.8rem;
-        height: calc(100vh - 75px);
     }
 
     .stats-grid {
