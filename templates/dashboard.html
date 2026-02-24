@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="panel">
+    <h2>Overview</h2>
+    <div class="stats-grid">
+        <div class="stat"><span>Notes</span><strong>{{ counts.notes }}</strong></div>
+        <div class="stat"><span>Open Reminders</span><strong>{{ counts.reminders }}</strong></div>
+        <div class="stat"><span>Alarms</span><strong>{{ counts.alarms }}</strong></div>
+        <div class="stat"><span>Timers</span><strong>{{ counts.timers }}</strong></div>
+        <div class="stat"><span>Quick Links</span><strong>{{ counts.quick_links }}</strong></div>
+        <div class="stat"><span>Schoology</span><strong>{{ schoology_status }}</strong></div>
+    </div>
+</section>
+
+<section class="panel">
+    <h2>Upcoming Reminders</h2>
+    {% if reminders %}
+        <ul class="item-list">
+            {% for reminder in reminders %}
+                <li class="item-row">
+                    <div>
+                        <strong>{{ reminder.text }}</strong>
+                        <small>{{ reminder.due_at or "No due date" }}</small>
+                    </div>
+                    <span class="pill {{ 'done' if reminder.is_done else 'open' }}">{{ 'Done' if reminder.is_done else 'Open' }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="muted">No reminders yet.</p>
+    {% endif %}
+</section>
+
+<section class="panel">
+    <h2>Latest Notes</h2>
+    {% if notes %}
+        <ul class="item-list">
+            {% for note in notes %}
+                <li class="item-row">
+                    <div>
+                        <strong>{{ note.title }}</strong>
+                        <small>{{ note.content[:120] }}{% if note.content|length > 120 %}...{% endif %}</small>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="muted">No notes yet.</p>
+    {% endif %}
+</section>
+
+<section class="panel">
+    <h2>Quick Links</h2>
+    {% if quick_links %}
+        <div class="quick-grid">
+            {% for link in quick_links %}
+                <a class="quick-link" href="{{ link.url }}" target="_blank" rel="noreferrer">{{ link.title }}</a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="muted">Add links in Quick Links.</p>
+    {% endif %}
+</section>
+{% endblock %}

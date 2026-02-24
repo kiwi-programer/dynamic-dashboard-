@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="panel">
+    <h2>Add Alarm</h2>
+    <form class="form-grid" method="post" action="/alarms/add">
+        <label>Label<input name="label" required maxlength="120"></label>
+        <label>Time<input type="time" name="time_of_day" required></label>
+        <button type="submit">Save Alarm</button>
+    </form>
+</section>
+
+<section class="panel">
+    <h2>Daily Alarms</h2>
+    {% if alarms %}
+        <ul class="item-list">
+            {% for alarm in alarms %}
+                <li class="item-row">
+                    <div>
+                        <strong>{{ alarm.label }}</strong>
+                        <small>{{ alarm.time_of_day }}</small>
+                    </div>
+                    <form method="post" action="/alarms/{{ alarm.id }}/delete">
+                        <button class="danger" type="submit">Delete</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="muted">No alarms added.</p>
+    {% endif %}
+</section>
+{% endblock %}

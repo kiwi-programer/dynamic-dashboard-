@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="panel">
+    <h2>Add Timer Preset</h2>
+    <form class="form-grid" method="post" action="/timers/add">
+        <label>Label<input name="label" required maxlength="120"></label>
+        <label>Seconds<input type="number" min="1" max="86400" name="seconds" required></label>
+        <button type="submit">Save Timer</button>
+    </form>
+</section>
+
+<section class="panel">
+    <h2>Run Timer</h2>
+    <div class="timer-box">
+        <div id="timer-display">00:00</div>
+        <button id="timer-stop" type="button" class="danger">Stop</button>
+    </div>
+    {% if timers %}
+        <ul class="item-list">
+            {% for timer in timers %}
+                <li class="item-row">
+                    <div>
+                        <strong>{{ timer.label }}</strong>
+                        <small>{{ timer.seconds }} sec</small>
+                    </div>
+                    <div class="actions">
+                        <button type="button" data-seconds="{{ timer.seconds }}" class="start-timer">Start</button>
+                        <form method="post" action="/timers/{{ timer.id }}/delete">
+                            <button class="danger" type="submit">Delete</button>
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="muted">No timers created.</p>
+    {% endif %}
+</section>
+{% endblock %}

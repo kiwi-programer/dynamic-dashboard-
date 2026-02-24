@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>{{ title }} | Dynamic Dashboard</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+    <header class="topbar">
+        <button id="launcher-btn" class="os-btn" type="button" aria-label="Open app tray">
+            <i data-lucide="grid-2x2"></i>
+        </button>
+        <h1>Dynamic Dashboard</h1>
+        <div class="clock" id="live-clock">--:--:--</div>
+        <div class="tray">
+            <span id="tray-date">--/--</span>
+        </div>
+    </header>
+
+    <!-- App Tray Overlay -->
+    <section id="launcher" class="launcher hidden" aria-hidden="true">
+        <div class="launcher-card">
+            <div class="launcher-head">
+                <strong>Apps</strong>
+                <button id="launcher-close" class="os-btn" type="button">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <input id="app-search" type="search" placeholder="Search apps… (Ctrl+K)">
+            <div class="launcher-grid" id="launcher-grid">
+                <a href="/dashboard" class="launcher-item">
+                    <span class="app-icon"><i data-lucide="layout-dashboard"></i></span>
+                    <span class="app-name">Dashboard</span>
+                </a>
+                <a href="/notes" class="launcher-item">
+                    <span class="app-icon"><i data-lucide="file-text"></i></span>
+                    <span class="app-name">Notes</span>
+                </a>
+                <a href="/reminders" class="launcher-item">
+                    <span class="app-icon"><i data-lucide="bell"></i></span>
+                    <span class="app-name">Reminders</span>
+                </a>
+                <a href="/alarms" class="launcher-item">
+                    <span class="app-icon"><i data-lucide="alarm-clock"></i></span>
+                    <span class="app-name">Alarms</span>
+                </a>
+                <a href="/timers" class="launcher-item">
+                    <span class="app-icon"><i data-lucide="timer"></i></span>
+                    <span class="app-name">Timers</span>
+                </a>
+                <a href="/quick-links" class="launcher-item">
+                    <span class="app-icon"><i data-lucide="link"></i></span>
+                    <span class="app-name">Quick Links</span>
+                </a>
+                <a href="/schoology" class="launcher-item">
+                    <span class="app-icon"><i data-lucide="graduation-cap"></i></span>
+                    <span class="app-name">Schoology</span>
+                </a>
+                <button type="button" class="launcher-item" data-action="focus-mode">
+                    <span class="app-icon"><i data-lucide="focus"></i></span>
+                    <span class="app-name">Focus Mode</span>
+                </button>
+                <button type="button" class="launcher-item" data-action="refresh">
+                    <span class="app-icon"><i data-lucide="refresh-cw"></i></span>
+                    <span class="app-name">Refresh</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fullscreen Screensaver Clock -->
+    <div id="screensaver" class="screensaver hidden" role="presentation">
+        <div class="ss-inner">
+            <div class="ss-clock" id="ss-clock">--:--:--</div>
+            <div class="ss-date" id="ss-date"></div>
+            <div class="ss-hint">Tap anywhere to dismiss</div>
+        </div>
+    </div>
+
+    <main class="content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <div id="toast-wrap" class="toast-wrap" aria-live="polite"></div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="panel">
+    <h2>Add Reminder</h2>
+    <form class="form-grid" method="post" action="/reminders/add">
+        <label>Reminder<input name="text" required maxlength="240"></label>
+        <label>Due Date/Time<input type="datetime-local" name="due_at"></label>
+        <button type="submit">Save Reminder</button>
+    </form>
+</section>
+
+<section class="panel">
+    <h2>Reminders</h2>
+    {% if reminders %}
+        <ul class="item-list">
+            {% for reminder in reminders %}
+                <li class="item-row">
+                    <div>
+                        <strong>{{ reminder.text }}</strong>
+                        <small>{{ reminder.due_at or "No due date" }}</small>
+                    </div>
+                    <div class="actions">
+                        <form method="post" action="/reminders/{{ reminder.id }}/toggle">
+                            <button type="submit">{{ 'Mark Open' if reminder.is_done else 'Mark Done' }}</button>
+                        </form>
+                        <form method="post" action="/reminders/{{ reminder.id }}/delete">
+                            <button class="danger" type="submit">Delete</button>
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="muted">No reminders created.</p>
+    {% endif %}
+</section>
+{% endblock %}

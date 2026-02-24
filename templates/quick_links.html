@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="panel">
+    <h2>Add Quick Link</h2>
+    <form class="form-grid" method="post" action="/quick-links/add">
+        <label>Title<input name="title" required maxlength="120"></label>
+        <label>URL<input name="url" type="url" required maxlength="500"></label>
+        <button type="submit">Save Link</button>
+    </form>
+</section>
+
+<section class="panel">
+    <h2>Quick Links</h2>
+    {% if quick_links %}
+        <ul class="item-list">
+            {% for link in quick_links %}
+                <li class="item-row">
+                    <a href="{{ link.url }}" target="_blank" rel="noreferrer">{{ link.title }}</a>
+                    <div class="actions">
+                        <a class="button-link" href="{{ link.url }}" target="_blank" rel="noreferrer">Open</a>
+                        <form method="post" action="/quick-links/{{ link.id }}/delete">
+                            <button class="danger" type="submit">Delete</button>
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="muted">No links saved.</p>
+    {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="panel">
+    <h2>Add Note</h2>
+    <form class="form-grid" method="post" action="/notes/add">
+        <label>Title<input name="title" required maxlength="120"></label>
+        <label>Content<textarea name="content" rows="4" maxlength="2000"></textarea></label>
+        <button type="submit">Save Note</button>
+    </form>
+</section>
+
+<section class="panel">
+    <h2>All Notes</h2>
+    {% if notes %}
+        <ul class="item-list">
+            {% for note in notes %}
+                <li class="item-row stacked">
+                    <div>
+                        <strong>{{ note.title }}</strong>
+                        <small>{{ note.created_at }}</small>
+                    </div>
+                    <p>{{ note.content or "(No content)" }}</p>
+                    <form method="post" action="/notes/{{ note.id }}/delete">
+                        <button class="danger" type="submit">Delete</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="muted">No notes created.</p>
+    {% endif %}
+</section>
+{% endblock %}

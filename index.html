@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Dashboard</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80') center/cover no-repeat;
+            position: relative;
+            transition: background-image 1.5s ease-in-out;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(102, 126, 234, 0.4) 0%, 
+                rgba(118, 75, 162, 0.3) 25%, 
+                rgba(240, 147, 251, 0.3) 50%, 
+                rgba(245, 87, 108, 0.3) 75%, 
+                rgba(79, 172, 254, 0.4) 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            pointer-events: none;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .dashboard {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 1.2rem;
+            position: relative;
+        }
+
+        .dashboard::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(1deg); }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 10;
+            flex-shrink: 0;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.8) 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255,255,255,0.3);
+            margin-bottom: 0.25rem;
+            animation: textGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes textGlow {
+            from { text-shadow: 0 0 30px rgba(255,255,255,0.3); }
+            to { text-shadow: 0 0 50px rgba(255,255,255,0.6), 0 0 70px rgba(255,255,255,0.4); }
+        }
+
+        .header p {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+            font-weight: 300;
+        }
+
+        .main-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 1rem;
+            position: relative;
+            z-index: 10;
+            min-height: 0;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1.2rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255,255,255,0.1) 0%, 
+                rgba(255,255,255,0.05) 50%, 
+                rgba(255,255,255,0.02) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .card-icon {
+            width: 18px;
+            height: 18px;
+            opacity: 0.9;
+        }
+
+        /* Time Card - Large */
+        .time-card {
+            grid-column: 1 / 3;
+            grid-row: 1 / 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .time-display {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .time {
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 0 30px rgba(255,255,255,0.3);
+            margin-bottom: 0.5rem;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .date {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.8);
+            font-weight: 300;
+        }
+
+        /* Weather Card */
+        .weather-card {
+            grid-column: 3 / 4;
+            grid-row: 1 / 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .weather-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 0.75rem;
+        }
+
+        .weather-icon {
+            font-size: 2.5rem;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .weather-temp {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.25rem;
+        }
+
+        .weather-desc {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+        }
+
+        /* Calendar/Events Card */
+        .calendar-card {
+            grid-column: 4 / 5;
+            grid-row: 1 / 2;
+        }
+
+        .calendar-date {
+            text-align: center;
+            padding: 0.5rem 0;
+        }
+
+        .calendar-day {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            line-height: 1;
+        }
+
+        .calendar-month {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.8);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 0.25rem;
+        }
+
+        /* Tasks Card */
+        .tasks-card {
+            grid-column: 1 / 2;
+            grid-row: 2 / 4;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tasks-list {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .tasks-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .tasks-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+        }
+
+        .tasks-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+        }
+
+        .task-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 0.6rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 0.6rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .task-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: linear-gradient(135deg, #00f5ff, #0099ff);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .task-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(4px);
+        }
+
+        .task-item.completed {
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
+
+        .task-item.completed::before {
+            background: linear-gradient(135deg, #00ff88, #00cc66);
+        }
+
+        .task-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        .task-text {
+            color: white;
+            font-weight: 500;
+            flex: 1;
+            font-size: 0.85rem;
+        }
+
+        .task-priority {
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+        }
+
+        .priority-high {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 107, 107, 0.3);
+        }
+
+        .priority-medium {
+            background: rgba(255, 177, 66, 0.2);
+            color: #ffb142;
+            border: 1px solid rgba(255, 177, 66, 0.3);
+        }
+
+        .priority-low {
+            background: rgba(74, 222, 128, 0.2);
+            color: #4ade80;
+            border: 1px solid rgba(74, 222, 128, 0.3);
+        }
+
+        .add-task {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 0.6rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .add-task:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .add-task-text {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        /* Assignments Card */
+        .assignments-card {
+            grid-column: 2 / 3;
+            grid-row: 2 / 4;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .assignments-list {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .assignments-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .assignments-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+        }
+
+        .assignments-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+        }
+
+        .assignment-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .assignment-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+            border-radius: 2px;
+        }
+
+        .assignment-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .assignment-title {
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .assignment-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .assignment-subject {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.75rem;
+        }
+
+        .assignment-due {
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 107, 107, 0.3);
+        }
+
+        /* Notes/Quick Access Card */
+        .notes-card {
+            grid-column: 3 / 4;
+            grid-row: 2 / 3;
+        }
+
+        .quick-links {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            flex: 1;
+        }
+
+        .quick-link {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .quick-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+        }
+
+        .quick-link-icon {
+            font-size: 1.5rem;
+        }
+
+        .quick-link-text {
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Focus Timer Card */
+        .focus-card {
+            grid-column: 4 / 5;
+            grid-row: 2 / 3;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .focus-timer {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            margin: 0.5rem 0;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .focus-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 0.5rem 1.25rem;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        .focus-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.05);
+        }
+
+        /* Stats Card */
+        .stats-card {
+            grid-column: 3 / 5;
+            grid-row: 3 / 4;
+        }
+
+        .stats-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 0.75rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .stat-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: scale(1.02);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .floating-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10vh) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Screensaver Mode */
+        .screensaver-mode .card:not(.time-card),
+        .screensaver-mode .header p,
+        .screensaver-mode .floating-particles {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 2s ease-in-out, visibility 2s ease-in-out;
+        }
+
+        .screensaver-mode .header h1 {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 2s ease-in-out, visibility 2s ease-in-out;
+        }
+
+        .screensaver-mode .time-card {
+            transform: scale(1.2) translate(-50%, -50%);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: auto;
+            min-width: 400px;
+            transition: all 2s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100;
+        }
+
+        .screensaver-mode .time {
+            font-size: 5rem;
+            transition: font-size 2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .screensaver-mode .date {
+            font-size: 1.4rem;
+            transition: font-size 2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .dashboard.screensaver-mode {
+            cursor: none;
+        }
+
+        @media (max-width: 1400px) {
+            .main-grid {
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: auto auto auto auto;
+            }
+            .time-card {
+                grid-column: 1 / 3;
+            }
+            .tasks-card {
+                grid-column: 1 / 2;
+                grid-row: 2 / 4;
+            }
+            .assignments-card {
+                grid-column: 2 / 3;
+                grid-row: 2 / 4;
+            }
+            .stats-card {
+                grid-column: 1 / 4;
+                grid-row: 4 / 5;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard { padding: 1rem; }
+            .header h1 { font-size: 2rem; }
+            .time { font-size: 2.5rem; }
+            .main-grid { 
+                grid-template-columns: 1fr; 
+                grid-template-rows: auto;
+                gap: 1rem;
+            }
+            .time-card, .tasks-card, .assignments-card, .notes-card, 
+            .weather-card, .calendar-card, .focus-card, .stats-card { 
+                grid-column: 1; 
+                grid-row: auto;
+            }
+            .card { padding: 1rem; }
+            
+            .screensaver-mode .time-card {
+                min-width: 300px;
+                transform: scale(1.1) translate(-50%, -50%);
+            }
+            
+            .screensaver-mode .time {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-particles" id="particles"></div>
+    
+    <div class="dashboard">
+        <div class="header">
+            <h1>Dashboard</h1>
+            <p>Your personalized command center</p>
+        </div>
+
+        <div class="main-grid">
+            <!-- Time Card -->
+            <div class="card time-card">
+                <div class="card-title">
+                    <svg class="card-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                    </svg>
+                    Current Time
+                </div>
+                <div class="time-display">
+                    <div class="time" id="currentTime">12:34:56</div>
+                    <div class="date" id="currentDate">Monday, January 1, 2024</div>
+                </div>
+            </div>
+
+            <!-- Weather Card -->
+            <div class="card weather-card">
+                <div class="card-title">
+                    <svg class="card-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                    </svg>
+                    Weather
+                </div>
+                <div class="weather-info">
+                    <div class="weather-icon">🌤️</div>
+                    <div class="weather-temp">72°F</div>
+                    <div class="weather-desc">Partly Cloudy</div>
+                </div>
+            </div>
+
+            <!-- Calendar Card -->
+            <div class="card calendar-card">
+                <div class="card-title">
+                    <svg class="card-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                    </svg>
+                    Today
+                </div>
+                <div class="calendar-date">
+                    <div class="calendar-day" id="calendarDay">23</div>
+                    <div class="calendar-month" id="calendarMonth">February</div>
+                </div>
+            </div>
+
+            <!-- Tasks Card -->
+            <div class="card tasks-card">
+                <div class="card-title">
+                    <svg class="card-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                    </svg>
+                    Today's Tasks
+                </div>
+                <div class="tasks-list" id="tasksList">
+                    <div class="task-item">
+                        <div class="task-content">
+                            <div class="task-text">Review reports</div>
+                            <div class="task-priority priority-high">High</div>
+                        </div>
+                    </div>
+                    <div class="task-item completed">
+                        <div class="task-content">
+                            <div class="task-text">Morning workout</div>
+                            <div class="task-priority priority-medium">Medium</div>
+                        </div>
+                    </div>
+                    <div class="task-item">
+                        <div class="task-content">
+                            <div class="task-text">Team meeting</div>
+                            <div class="task-priority priority-medium">Medium</div>
+                        </div>
+                    </div>
+                    <div class="task-item">
+                        <div class="task-content">
+                            <div class="task-text">Update docs</div>
+                            <div class="task-priority priority-low">Low</div>
+                        </div>
+                    </div>
+                    <div class="task-item">
+                        <div class="task-content">
+                            <div class="task-text">Code review</div>
+                            <div class="task-priority priority-medium">Medium</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="add-task" onclick="addNewTask()">
+                    <div class="add-task-text">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"></path>
+                        </svg>
+                        Add Task
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assignments Card -->
+            <div class="card assignments-card">
+                <div class="card-title">
+                    <svg class="card-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                        <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path>
+                    </svg>
+                    Upcoming Assignments
+                </div>
+                <div class="assignments-list">
+                    <div class="assignment-item">
+                        <div class="assignment-title">Math Problem Set #7</div>
+                        <div class="assignment-details">
+                            <div class="assignment-subject">Mathematics</div>
+                            <div class="assignment-due">Due Feb 25</div>
+                        </div>
+                    </div>
+                    <div class="assignment-item">
+                        <div class="assignment-title">History Essay: WWII</div>
+                        <div class="assignment-details">
+                            <div class="assignment-subject">History</div>
+                            <div class="assignment-due">Due Feb 27</div>
+                        </div>
+                    </div>
+                    <div class="assignment-item">
+                        <div class="assignment-title">Science Lab Report</div>
+                        <div class="assignment-details">
+                            <div class="assignment-subject">Chemistry</div>
+                            <div class="assignment-due">Due Mar 1</div>
+                        </div>
+                    </div>
+                    <div class="assignment-item">
+                        <div class="assignment-title">English Reading Quiz</div>
+                        <div class="assignment-details">
+                            <div class="assignment-subject">Literature</div>
+                            <div class="assignment-due">Due Feb 26</div>
+                        </div>
+                    </div>
+                    <div class="assignment-item">
+                        <div class="assignment-title">Physics Project Presentation</div>
+                        <div class="assignment-details">
+                            <div class="assignment-subject">Physics</div>
+                            <div class="assignment-due">Due Mar 3</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Links Card -->
+            <div class="card notes-card">
+                <div class="card-title">
+                    <svg class="card-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+                    </svg>
+                    Quick Access
+                </div>
+                <div class="quick-links">
+                    <div class="quick-link">
+                        <div class="quick-link-icon">📧</div>
+                        <div class="quick-link-text">Email</div>
+                    </div>
+                    <div class="quick-link">
+                        <div class="quick-link-icon">📚</div>
+                        <div class="quick-link-text">Library</div>
+                    </div>
+                    <div class="quick-link">
+                        <div class="quick-link-icon">💬</div>
+                        <div class="quick-link-text">Messages</div>
+                    </div>
+                    <div class="quick-link">
+                        <div class="quick-link-icon">📁</div>
+                        <div class="quick-link-text">Files</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Focus Timer Card -->
+            <div class="card focus-card">
+                <div class="card-title">
+                    <svg class="card-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                    </svg>
+                    Focus Timer
+                </div>
+                <div class="focus-timer" id="focusTimer">25:00</div>
+                <button class="focus-btn" onclick="toggleFocusTimer()">Start</button>
+            </div>
+
+            <!-- Stats Card -->
+            <div class="card stats-card">
+                <div class="card-title">
+                    <svg class="card-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+                        <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
+                    </svg>
+                    Productivity Stats
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Tasks Done</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">5</div>
+                        <div class="stat-label">Assignments</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">85%</div>
+                        <div class="stat-label">Completion</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">6.5h</div>
+                        <div class="stat-label">Focus Time</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Background image rotation
+        const backgroundImages = [
+            'https://source.unsplash.com/3840x2160/?landscape,mountain',
+            'https://source.unsplash.com/3840x2160/?nature,forest',
+            'https://source.unsplash.com/3840x2160/?ocean,beach',
+            'https://source.unsplash.com/3840x2160/?architecture,building',
+            'https://source.unsplash.com/3840x2160/?city,skyline',
+            'https://source.unsplash.com/3840x2160/?wildlife,animal',
+            'https://source.unsplash.com/3840x2160/?desert,landscape',
+            'https://source.unsplash.com/3840x2160/?lake,nature'
+        ];
+
+        let currentImageIndex = 0;
+
+        function changeBackground() {
+            currentImageIndex = (currentImageIndex + 1) % backgroundImages.length;
+            document.body.style.backgroundImage = `url('${backgroundImages[currentImageIndex]}')`;
+        }
+
+        // Change background every 5 minutes
+        setInterval(changeBackground, 300000);
+
+        // Update time and date
+        function updateTime() {
+            const now = new Date();
+            const time = now.toLocaleTimeString('en-US', { 
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            const date = now.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            document.getElementById('currentTime').textContent = time;
+            document.getElementById('currentDate').textContent = date;
+            
+            // Update calendar
+            document.getElementById('calendarDay').textContent = now.getDate();
+            document.getElementById('calendarMonth').textContent = now.toLocaleDateString('en-US', { month: 'long' });
+        }
+
+        // Task interaction
+        function addNewTask() {
+            const taskText = prompt('Enter new task:');
+            if (taskText && taskText.trim()) {
+                const tasksList = document.getElementById('tasksList');
+                const newTask = document.createElement('div');
+                newTask.className = 'task-item';
+                newTask.innerHTML = `
+                    <div class="task-content">
+                        <div class="task-text">${taskText.trim()}</div>
+                        <div class="task-priority priority-medium">Medium</div>
+                    </div>
+                `;
+                newTask.onclick = () => toggleTask(newTask);
+                tasksList.appendChild(newTask);
+            }
+        }
+
+        function toggleTask(taskElement) {
+            taskElement.classList.toggle('completed');
+        }
+
+        // Add click handlers to existing tasks
+        document.querySelectorAll('.task-item').forEach(task => {
+            task.onclick = () => toggleTask(task);
+        });
+
+        // Focus Timer
+        let focusTimerInterval;
+        let focusTimeLeft = 1500; // 25 minutes in seconds
+        let isFocusTimerRunning = false;
+
+        function toggleFocusTimer() {
+            const btn = event.target;
+            if (isFocusTimerRunning) {
+                clearInterval(focusTimerInterval);
+                btn.textContent = 'Start';
+                isFocusTimerRunning = false;
+            } else {
+                focusTimerInterval = setInterval(updateFocusTimer, 1000);
+                btn.textContent = 'Pause';
+                isFocusTimerRunning = true;
+            }
+        }
+
+        function updateFocusTimer() {
+            if (focusTimeLeft > 0) {
+                focusTimeLeft--;
+                const minutes = Math.floor(focusTimeLeft / 60);
+                const seconds = focusTimeLeft % 60;
+                document.getElementById('focusTimer').textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            } else {
+                clearInterval(focusTimerInterval);
+                focusTimeLeft = 1500;
+                document.querySelector('.focus-btn').textContent = 'Start';
+                isFocusTimerRunning = false;
+                alert('Focus session complete! Take a break.');
+            }
+        }
+
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Initialize
+        updateTime();
+        setInterval(updateTime, 1000);
+        createParticles();
+
+        // Screensaver functionality
+        let inactivityTimer;
+        let isScreensaverActive = false;
+
+        function resetInactivityTimer() {
+            if (isScreensaverActive) {
+                exitScreensaver();
+            }
+            
+            clearTimeout(inactivityTimer);
+            inactivityTimer = setTimeout(() => {
+                enterScreensaver();
+            }, 20000); // 20 seconds
+        }
+
+        function enterScreensaver() {
+            isScreensaverActive = true;
+            document.body.classList.add('screensaver-mode');
+        }
+
+        function exitScreensaver() {
+            isScreensaverActive = false;
+            document.body.classList.remove('screensaver-mode');
+        }
+
+        // Add event listeners for user activity
+        const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
+        
+        events.forEach(event => {
+            document.addEventListener(event, resetInactivityTimer, { passive: true });
+        });
+
+        // Initialize inactivity timer
+        resetInactivityTimer();
+
+        // Add interactive hover effects
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 30;
+                const rotateY = (centerX - x) / 30;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
+            });
+        });
+    </script>
+</body>
+</html>
